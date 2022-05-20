@@ -97,34 +97,66 @@ function setClock (selector, endtime) {
 setClock(".timer", deadline);
 
 
+// МОДАЛЬНОЕ ОКНО
 
 
+const modalBtns = document.querySelectorAll("[data-modal]");
+const modal = document.querySelector(".modal");
+const closeModalBtn = document.querySelector("[data-close");
+
+modalBtns.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+        modal.style.display = "block";
+        document.body.style.overflow = "hidden";
+    })
+});
+
+function closeModal(){
+    modal.style.display = "none";
+    document.body.style.overflow = "";
+}
+
+closeModalBtn.addEventListener("click", closeModal);
 
 
+modal.addEventListener("click",(event)=>{
+    if(event.target === modal){
+        closeModal();
+    }
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+document.addEventListener("keydown", (event)=>{
+      if(event.code === "Escape" && modal.style.display === "block"){
+          closeModal();
+      }
+});
 
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

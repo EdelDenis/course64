@@ -102,34 +102,56 @@ setClock(".timer", deadline);
 
 const modalBtns = document.querySelectorAll("[data-modal]");
 const modal = document.querySelector(".modal");
-const closeModalBtn = document.querySelector("[data-close");
+const modalCloseBtn = document.querySelector("[data-close]");
 
-modalBtns.forEach(btn=>{
-    btn.addEventListener("click",()=>{
-        modal.style.display = "block";
-        document.body.style.overflow = "hidden";
-    })
-});
+function openModal () {
+    modal.style.display = "block";
+    document.body.style.overflow = "hidden";
+    clearInterval(modalTimerId);
+}
 
-function closeModal(){
+modalBtns.forEach(item=>{
+    item.addEventListener("click",openModal);
+})
+
+function closeModal () {
     modal.style.display = "none";
     document.body.style.overflow = "";
 }
 
-closeModalBtn.addEventListener("click", closeModal);
-
+modalCloseBtn.addEventListener("click", closeModal);
 
 modal.addEventListener("click",(event)=>{
-    if(event.target === modal){
+    if(event.target == modal){
         closeModal();
     }
-});
+})
 
-document.addEventListener("keydown", (event)=>{
-      if(event.code === "Escape" && modal.style.display === "block"){
-          closeModal();
-      }
-});
+document.addEventListener("keydown",(event)=>{
+    if(event.code === "Escape" && modal.style.display === "block"){
+        closeModal();
+    }
+})
+
+const modalTimerId = setTimeout(openModal,3000);
+
+function showModalByScroll (){
+    if(window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight){
+    openModal();
+    window.removeEventListener("scroll",showModalByScroll);
+    }
+}
+
+window.addEventListener("scroll",showModalByScroll);
+
+
+
+
+
+
+
+
+
 
 
 });

@@ -1,6 +1,6 @@
 "use strict"
 
-document.addEventListener ("DOMContentLoaded", ()=>{
+window.addEventListener ("DOMContentLoaded", ()=>{
 
 // Tabs
 
@@ -153,7 +153,7 @@ class MenuCard {
         this.title = title;
         this.descr = descr;
         this.price = price;
-        this.parent = document.querySelector("parentSelector");
+        this.parent = document.querySelector(parentSelector);
         this.transfer = 27;
         this.changeToUAH();
     }
@@ -162,8 +162,8 @@ class MenuCard {
     }
 
     render () {
-        const element = document.querySelector("div");
-        element.innerHTMl = `<div class="menu__item">
+        const element = document.createElement("div");
+        element.innerHTML = `<div class="menu__item">
         <img src=${this.src} alt=${this.alt}>
         <h3 class="menu__item-subtitle">${this.title}</h3>
         <div class="menu__item-descr">${this.descr}</div>
@@ -186,9 +186,11 @@ new MenuCard (
     овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной
     ценой и высоким качеством!`,
     9,
-    ".menu.container"
+    ".menu .container"
     
 ).render();
+
+
 
 
 

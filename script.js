@@ -219,17 +219,22 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Forms 
 
+    // <?php 
+    //    echo var_dump($_POST); - написать в случае FormData
+
+
+
     const forms = document.querySelectorAll("form");
 
     const message = {
-        loading: "Загрузка",
-        success: "Спасибо!",
-        failure: "Что-то пошло не так..."
+        loading: "Загрузка...",
+        success: "Успешно!",
+        failure: "Ошибка!"
     };
 
     forms.forEach(item => {
         postData(item);
-    });
+    })
 
     function postData(form) {
         form.addEventListener("submit", (event) => {
@@ -241,36 +246,88 @@ window.addEventListener("DOMContentLoaded", () => {
             form.append(statusMessage);
 
             const request = new XMLHttpRequest();
+
             request.open("POST", "server.php");
 
-            // request.setRequestHeader("Content-type", "multipart/form-data"); - не работает с ХМЛХТТП(без джейсона не надо)
-            // JSON---
-            request.setRequestHeader("Content-type", "application/json");
+            // request.setRequestHeader не нужен (не работает с XMLHTTPREQUEST + FORMDATA)
+
+
             const formData = new FormData(form);
-
-            const object = {};
-            formData.forEach(function(value, key) {
-                object[key] = value;
-            })
-
-            const json = JSON.stringify(object);
-
-            request.send(json);
+            request.send(formData);
 
             request.addEventListener("load", () => {
                 if (request.status === 200) {
                     console.log(request.response);
                     statusMessage.textContent = message.success;
-                    form.reset();
-                    setTimeout(() => {
-                        statusMessage.remove();
+                    setTimeout(function() {
+                        statusMessage.remove()
                     }, 2000)
+                    form.reset();
                 } else {
-                    statusMessage.textContent = message.failure
+                    statusMessage.textContent = message.failure;
                 }
             })
         })
     }
+
+
+    // Формы с джейсоном (данные в формате джейсон)
+
+    // В PHP 
+
+    /*<?php 
+    $_POST = json_decode(file_get_contents("php://input"),true);
+    echo var_dump($_POST);
+
+    const forms = document.querySelectorAll("form");
+
+    const message = {
+        loading: "Загрузка...",
+        success: "Успешно!",
+        failure: "Ошибка"
+    };
+
+    function postData (form) {
+        form.addEventListener("submit",(event)=>{
+            event.preventDefault();
+
+            const statusMessage = document.createElement("div");
+            statusMessage.classList.add("status");
+            statusMessage.textContent = message.loading;
+            form.append(statusMessage);
+
+            const request = new XMLHttpRequest();
+
+            request.open("POST","server.php");
+            request.setRequestHeader("Content-type","application/json;");
+            const formData = new FormData(form) // - должный превратить в формат джейсон
+
+            const object = {};
+
+            formData.forEach(function(value,key){
+                object[key] = value;
+            });
+
+            const json = JSON.stringify(object);
+
+            request.send(json);
+
+            request.addEventListener("load",()=>{
+                if(request.status === 200){
+                    console.log(request.response);
+                    statusMessage.textContent = message.success;
+                    form.reset();
+                    setTimeout(()=>{
+                        statusMessage.remove();
+                    }, 2000);
+                } else {
+                    statusMessage.textContent = message.failure;
+                }
+            })
+        })
+    }
+    */
+
 
 
 

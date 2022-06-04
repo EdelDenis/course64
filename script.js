@@ -105,7 +105,8 @@ window.addEventListener("DOMContentLoaded", () => {
     const modalCloseBtn = document.querySelector("[data-close]");
 
     function openModal() {
-        modal.style.display = "block";
+        modal.classList.add("show");
+        modal.classList.remove("hide");
         document.body.style.overflow = "hidden";
         clearInterval(modalTimerId);
     }
@@ -115,8 +116,9 @@ window.addEventListener("DOMContentLoaded", () => {
     })
 
     function closeModal() {
-        modal.style.display = "none";
-        document.body.style.overflow = "";
+        modal.classList.add("hide");
+        modal.classList.remove("show");
+        document.style.overflow = "";
     }
 
     modalCloseBtn.addEventListener("click", closeModal);
@@ -222,19 +224,17 @@ window.addEventListener("DOMContentLoaded", () => {
     // <?php 
     //    echo var_dump($_POST); - написать в случае FormData
 
-
-
     const forms = document.querySelectorAll("form");
 
     const message = {
-        loading: "Загрузка...",
-        success: "Успешно!",
-        failure: "Ошибка!"
+        loading: "Загрузка!",
+        success: "Успешно!!!",
+        failure: "Ошибка"
     };
 
     forms.forEach(item => {
         postData(item);
-    })
+    });
 
     function postData(form) {
         form.addEventListener("submit", (event) => {
@@ -248,10 +248,6 @@ window.addEventListener("DOMContentLoaded", () => {
             const request = new XMLHttpRequest();
 
             request.open("POST", "server.php");
-
-            // request.setRequestHeader не нужен (не работает с XMLHTTPREQUEST + FORMDATA)
-
-
             const formData = new FormData(form);
             request.send(formData);
 
@@ -259,16 +255,19 @@ window.addEventListener("DOMContentLoaded", () => {
                 if (request.status === 200) {
                     console.log(request.response);
                     statusMessage.textContent = message.success;
-                    setTimeout(function() {
-                        statusMessage.remove()
-                    }, 2000)
                     form.reset();
+                    setTimeout(() => {
+                        statusMessage.remove();
+                    }, 2000);
                 } else {
-                    statusMessage.textContent = message.failure;
+                    message.textContent = message.failure;
                 }
             })
         })
     }
+
+
+
 
 
     // Формы с джейсоном (данные в формате джейсон)
@@ -282,13 +281,17 @@ window.addEventListener("DOMContentLoaded", () => {
     const forms = document.querySelectorAll("form");
 
     const message = {
-        loading: "Загрузка...",
-        success: "Успешно!",
+        loading: "Загрузка!",
+        success: "Успешно!!",
         failure: "Ошибка"
     };
 
-    function postData (form) {
-        form.addEventListener("submit",(event)=>{
+    forms.forEach(item => {
+        postData(item);
+    });
+
+    function postData(form) {
+        form.addEventListener("submit", (event) => {
             event.preventDefault();
 
             const statusMessage = document.createElement("div");
@@ -298,34 +301,32 @@ window.addEventListener("DOMContentLoaded", () => {
 
             const request = new XMLHttpRequest();
 
-            request.open("POST","server.php");
-            request.setRequestHeader("Content-type","application/json;");
-            const formData = new FormData(form) // - должный превратить в формат джейсон
-
+            request.open("POST", "server.php");
+            request.setRequestHeader("Content-type", "application/json;charset=utf-8");
+            const formData = new FormData(form);
             const object = {};
-
-            formData.forEach(function(value,key){
+            formData.forEach((key,value)=>{
                 object[key] = value;
-            });
-
-            const json = JSON.stringify(object);
-
+            })
+            const json = JSON.stringify(object)
             request.send(json);
 
-            request.addEventListener("load",()=>{
-                if(request.status === 200){
+            request.addEventListener("load", () => {
+                if (request.status === 200) {
                     console.log(request.response);
                     statusMessage.textContent = message.success;
                     form.reset();
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         statusMessage.remove();
                     }, 2000);
                 } else {
-                    statusMessage.textContent = message.failure;
+                    message.textContent = message.failure;
                 }
             })
         })
     }
+
+
     */
 
 

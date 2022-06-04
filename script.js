@@ -105,8 +105,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const modalCloseBtn = document.querySelector("[data-close]");
 
     function openModal() {
-        modal.classList.add("show");
-        modal.classList.remove("hide");
+        modal.style.display = "block";
         document.body.style.overflow = "hidden";
         clearInterval(modalTimerId);
     }
@@ -116,9 +115,8 @@ window.addEventListener("DOMContentLoaded", () => {
     })
 
     function closeModal() {
-        modal.classList.add("hide");
-        modal.classList.remove("show");
-        document.style.overflow = "";
+        modal.style.display = "none";
+        document.body.style.overflow = "";
     }
 
     modalCloseBtn.addEventListener("click", closeModal);
@@ -265,6 +263,8 @@ window.addEventListener("DOMContentLoaded", () => {
             })
         })
     }
+
+
 
 
 

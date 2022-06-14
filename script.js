@@ -404,6 +404,14 @@ window.addEventListener("DOMContentLoaded", () => {
     */
 
 
+    // Подробно про npm и проект. JSON-server --------------
+
+    fetch("http://localhost:3000/menu")
+        .then(data => data.json())
+        .then(res => console.log(res));
+
+    // Получение данных с сервера. Async/Await (ES8)
+
 
 
 

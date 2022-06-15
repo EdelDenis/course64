@@ -410,10 +410,11 @@ window.addEventListener("DOMContentLoaded", () => {
     // npm install json-server (-g если глобально)  (--save-dev)
     // npm i установить проекты которые были установлены как у автора (при нолчии package.json)
     // json - сервер - сервер по работе с ДЖЕЙСОН
+    // npx json-server db.json - запустить джейсон сервер 
 
 
 
-    fetch("db.json")
+    fetch("http://localhost:3000/menu")
         .then(data => data.json())
         .then(res => console.log(res));
 

@@ -253,19 +253,20 @@ window.addEventListener("DOMContentLoaded", () => {
 
             // JSON ПРИМЕР!!!!
 
-            /*const object = {};
-            formData.forEach(function(value,key){
+            const object = {};
+            formData.forEach(function(value, key) {
                 object[key] = value;
-            });*/
+            });
 
             //FETCH ПРИМЕР 
 
             fetch("server.php", {
                     method: "POST",
-                    //headers: {
-                    //   "Content-type": "application/json"   // - JSON!!!
-                    //},
-                    body: formData // JSON!!! - JSON.stringify(object)
+                    headers: {
+                        "Content-type": "application/json" // - JSON!!!
+                    },
+                    body: // formData // JSON!!! - 
+                        JSON.stringify(object)
                 }).then(data => data.text())
                 .then(data => {
                     console.log(data);
@@ -405,8 +406,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
     // Подробно про npm и проект. JSON-server --------------
+    // npm init - инициализировать нпм проект 
+    // npm install json-server (-g если глобально)  (--save-dev)
+    // npm i установить проекты которые были установлены как у автора (при нолчии package.json)
+    // json - сервер - сервер по работе с ДЖЕЙСОН
 
-    fetch("http://localhost:3000/menu")
+
+
+    fetch("db.json")
         .then(data => data.json())
         .then(res => console.log(res));
 

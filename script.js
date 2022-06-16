@@ -40,6 +40,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 
+
+
+
     //Timer 
 
 
@@ -188,6 +191,23 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    const getResource = async(url) => {
+        const res = await fetch(url);
+
+        if (!res.ok) {
+            throw new Error(`Could not fetct ${url}, status ${res.status}`);
+        }
+
+        return await res.json();
+    }
+
+    getResource("http://localhost:3000/menu")
+        .then(data => {
+            data.forEach(obj => {
+                new MenuCard(obj.img).render();
+            });
+        })
+
     new MenuCard(
         "img/tabs/vegy.jpg",
         "vegy",
@@ -231,10 +251,22 @@ window.addEventListener("DOMContentLoaded", () => {
     };
 
     forms.forEach(item => {
-        postData(item);
+        bindPostData(item);
     });
 
-    function postData(form) {
+    const postData = async(url, data) => {
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: data
+        })
+
+        return await res.json();
+    }
+
+    function bindPostData(form) {
         form.addEventListener("submit", (event) => {
             event.preventDefault();
 
@@ -242,32 +274,16 @@ window.addEventListener("DOMContentLoaded", () => {
             statusMessage.src = message.loading;
             statusMessage.style.cssText = `
             display:block;
-            margin: 0 auto;
+            margin:0 auto;
             `;
             form.insertAdjacentElement("afterend", statusMessage);
 
-            //const request = new XMLHttpRequest();
-            //request.open("POST", "server.php");
             const formData = new FormData(form);
-            // request.send(formData);
 
-            // JSON ПРИМЕР!!!!
+            const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-            const object = {};
-            formData.forEach(function(value, key) {
-                object[key] = value;
-            });
 
-            //FETCH ПРИМЕР 
-
-            fetch("server.php", {
-                    method: "POST",
-                    headers: {
-                        "Content-type": "application/json" // - JSON!!!
-                    },
-                    body: // formData // JSON!!! - 
-                        JSON.stringify(object)
-                }).then(data => data.text())
+            postData("http://localhost:3000/requests", json)
                 .then(data => {
                     console.log(data);
                     showThanksModal(message.success);
@@ -277,23 +293,12 @@ window.addEventListener("DOMContentLoaded", () => {
                 }).finally(() => {
                     form.reset();
                 })
-
-
-
-
-
-            /*request.addEventListener("load", () => {
-                if (request.status === 200) {
-                    console.log(request.response);
-                    showThanksModal(message.success);
-                    form.reset();
-                    statusMessage.remove();
-                } else {
-                    showThanksModal(message.failure);
-                }
-            })*/
         })
     }
+
+
+
+
 
     function showThanksModal(message) {
         const prevModalDialog = document.querySelector(".modal__dialog");
@@ -408,7 +413,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // Подробно про npm и проект. JSON-server --------------
     // npm init - инициализировать нпм проект 
     // npm install json-server (-g если глобально)  (--save-dev)
-    // npm i установить проекты которые были установлены как у автора (при нолчии package.json)
+    // npm i установить проекты которые были установлены как у автора (при наличии package.json)
     // json - сервер - сервер по работе с ДЖЕЙСОН
     // npx json-server db.json - запустить джейсон сервер 
 
